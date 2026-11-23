@@ -15,12 +15,21 @@ LINE = (
 )
 
 OUTPUT_PATH = "/output/entry.txt"
+MAX_CHARS = 200
 
 
 def main() -> None:
+    line = LINE
+    # The gate accepts 1-200 characters of non-blank UTF-8 text; refuse
+    # to write anything that would fail it rather than submit junk.
+    if not line.strip() or len(line) > MAX_CHARS:
+        raise SystemExit(
+            "entry line is %d characters; must be 1-%d non-blank"
+            % (len(line), MAX_CHARS)
+        )
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as f:
-        f.write(LINE)
+        f.write(line)
 
 
 if __name__ == "__main__":
